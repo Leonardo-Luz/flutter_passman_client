@@ -1,16 +1,39 @@
-# flutter_passman_client
+# Passman Flutter Client
 
-A new Flutter project.
+*A standalone Flutter client for [`leonardo-luz/rust-passman-cli`](https://github.com/leonardo-luz/rust-passman-cli)*
 
-## Getting Started
+![Passman Gif](./assets/gifs/passman.gif)
 
-This project is a starting point for a Flutter application.
+## Requirements
 
-A few resources to get you started if this is your first Flutter project:
+* Flutter
+* SQLite
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* **Backup export/import** fully compatible with `rust-passman-cli`
+* **Secure password storage**: passwords are encrypted with a strong algorithm and protected by a master password
+* **Strong password generation**
+* **Import passwords from files**
+
+## Installation & Running
+
+```bash
+
+    # Clone the repository
+    git clone https://github.com/leonardo-luz/passman-flutter-client.git
+    cd passman-flutter-client
+
+    # Run the app
+    flutter pub get
+    flutter run
+
+```
+
+## Contributing
+
+Contributions are welcome! Feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE.md).
