@@ -1,26 +1,40 @@
-import 'dart:io';
 import 'dart:math';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
+import 'package:flutter_passman_client/models/passentry.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
 import 'package:flutter_passman_client/ui/_core/widgets/appbar.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
-  static const route = "/register";
+class EditScreen extends StatefulWidget {
+  final PassEntry entry;
+  const EditScreen({super.key, required this.entry});
+  static const route = "/edit";
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<EditScreen> createState() => _EditScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final serviceCtrl = TextEditingController();
-  final passwordCtrl = TextEditingController();
-  final descriptionCtrl = TextEditingController();
-  final masterCtrl = TextEditingController();
+class _EditScreenState extends State<EditScreen> {
+  late final TextEditingController serviceCtrl;
+  late final TextEditingController passwordCtrl;
+  late final TextEditingController descriptionCtrl;
+  late final TextEditingController masterCtrl;
   bool passwordVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    serviceCtrl = TextEditingController(text: widget.entry.service);
+    passwordCtrl = TextEditingController(text: widget.entry.secret);
+    descriptionCtrl = TextEditingController(
+      text: widget.entry.description ?? "",
+    );
+    masterCtrl = TextEditingController(text: "");
+  }
 
   @override
   void dispose() {
@@ -31,17 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  String generatePassword([int length = 16]) {
-    const lower = 'abcdefghijkmnopqrstuvwxyz';
-    const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-    const digits = '23456789';
-    const symbols = '!@#\$^&*()-_+';
-    final all = '$lower$upper$digits$symbols';
-    final rand = Random.secure();
-    return List.generate(length, (_) => all[rand.nextInt(all.length)]).join();
-  }
-
-  Future<void> getPasswordFile() async {
+  Future<void> importFileAsPassword() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['txt'],
@@ -61,11 +65,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
   }
 
+  void showSnackbar({required String message, required bool success}) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.showSnackBar(
+      SnackBar(
+        content: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              success ? Icons.check_circle : Icons.remove_circle,
+              color: AppColors.backgroundColor,
+            ),
+            const SizedBox(width: 16),
+            Text(message, style: const TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ),
+        backgroundColor: AppColors.mainColor,
+      ),
+    );
+  }
+
+  String generatePassword([int length = 16]) {
+    const lower = 'abcdefghijkmnopqrstuvwxyz';
+    const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+    const digits = '23456789';
+    const symbols = '!@#\$^&*()-_+';
+    final all = '$lower$upper$digits$symbols';
+    final rand = Random.secure();
+    return List.generate(length, (_) => all[rand.nextInt(all.length)]).join();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      appBar: getAppBar(title: 'Add New Password'),
+      appBar: getAppBar(title: 'Edit Password'),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
@@ -95,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     IconButton(
                       icon: const Icon(Icons.file_open),
                       tooltip: "Import Password from File",
-                      onPressed: getPasswordFile,
+                      onPressed: importFileAsPassword,
                     ),
                     IconButton(
                       icon: const Icon(Icons.autorenew),
@@ -129,36 +164,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 final desc = descriptionCtrl.text.trim();
                 final master = masterCtrl.text.trim();
 
-                if (svc.isEmpty || pwd.isEmpty || master.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 16,
-                        children: [
-                          Icon(
-                            Icons.remove_circle,
-                            color: AppColors.backgroundColor,
-                          ),
-                          Text(
-                            "Service, password and master password are required!",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      backgroundColor: AppColors.mainColor,
-                    ),
+                if (svc.isEmpty || master.isEmpty) {
+                  showSnackbar(
+                    message: "Service and master password are required.",
+                    success: false,
                   );
                   return;
                 }
 
                 final controller = context.read<PasswordController>();
                 final navigator = Navigator.of(context);
-                final messenger = ScaffoldMessenger.of(context);
 
                 try {
-                  await controller.addPassword(
+                  await controller.updatePassword(
+                    id: widget.entry.id,
                     service: svc,
                     masterPassword: master,
                     plainPassword: pwd,
@@ -166,53 +185,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   );
                 } catch (e) {
                   if (!mounted) return;
-                  messenger.showSnackBar(
-                    SnackBar(
-                      content: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 16,
-                        children: [
-                          Icon(
-                            Icons.remove_circle,
-                            color: AppColors.backgroundColor,
-                          ),
-                          Text(
-                            "Error saving: $e",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      backgroundColor: AppColors.mainColor,
-                    ),
-                  );
+                  showSnackbar(message: "Failed to update: $e", success: false);
                   return;
                 }
 
                 if (!mounted) return;
-                messenger.showSnackBar(
-                  const SnackBar(
-                    content: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 16,
-                      children: [
-                        Icon(
-                          Icons.check_circle,
-                          color: AppColors.backgroundColor,
-                        ),
-                        Text(
-                          "Password saved!",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    backgroundColor: AppColors.mainColor,
-                  ),
-                );
+                showSnackbar(message: "Password updated!", success: true);
                 navigator.pop();
               },
-              child: const Text("Save"),
+              child: const Text("Save Changes"),
             ),
           ],
         ),

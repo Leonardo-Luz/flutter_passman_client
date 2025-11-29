@@ -24,6 +24,16 @@ class PasswordDao {
     return result.map((row) => PassEntry.fromMap(row)).toList();
   }
 
+  Future<void> update(PassEntry entry) async {
+    final db = await AppDatabase.instance.database;
+    await db.update(
+      'passwords',
+      entry.toMap(),
+      where: 'id = ?',
+      whereArgs: [entry.id],
+    );
+  }
+
   Future<void> deleteById(String id) async {
     final db = await AppDatabase.instance.database;
     await db.delete('passwords', where: 'id = ?', whereArgs: [id]);

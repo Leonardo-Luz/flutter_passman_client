@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
+import 'package:flutter_passman_client/models/passentry.dart';
 import 'package:flutter_passman_client/ui/_core/app_theme.dart';
+import 'package:flutter_passman_client/ui/edit/edit_screen.dart';
 import 'package:flutter_passman_client/ui/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -28,12 +30,23 @@ class MyApp extends StatelessWidget {
       title: 'Passman',
       theme: AppTheme.appTheme,
       initialRoute: SplashScreen.route,
-      routes: {
-        SplashScreen.route: (context) => SplashScreen(),
-        HomeScreen.route: (context) => HomeScreen(),
-        OptionsScreen.route: (context) => OptionsScreen(),
-        RegisterScreen.route: (context) => RegisterScreen(),
-        SearchScreen.route: (context) => SearchScreen(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case SplashScreen.route:
+            return MaterialPageRoute(builder: (_) => SplashScreen());
+          case HomeScreen.route:
+            return MaterialPageRoute(builder: (_) => HomeScreen());
+          case OptionsScreen.route:
+            return MaterialPageRoute(builder: (_) => OptionsScreen());
+          case RegisterScreen.route:
+            return MaterialPageRoute(builder: (_) => RegisterScreen());
+          case SearchScreen.route:
+            return MaterialPageRoute(builder: (_) => SearchScreen());
+          case EditScreen.route:
+            final entry = settings.arguments as PassEntry;
+            return MaterialPageRoute(builder: (_) => EditScreen(entry: entry));
+        }
+        return null;
       },
     );
   }

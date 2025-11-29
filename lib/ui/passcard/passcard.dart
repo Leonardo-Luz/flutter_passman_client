@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_passman_client/models/passentry.dart';
+import 'package:flutter_passman_client/ui/edit/edit_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
 import 'widgets/master_password_dialogue.dart';
@@ -190,7 +192,18 @@ class _PassCardState extends State<PassCard> {
                             ElevatedButton.icon(
                               icon: const Icon(Icons.edit),
                               label: const Text("Edit"),
-                              onPressed: () {},
+                              onPressed: () => decryptedPass != null
+                                  ? Navigator.pushNamed(
+                                      context,
+                                      EditScreen.route,
+                                      arguments: PassEntry(
+                                        id: widget.id,
+                                        service: widget.service,
+                                        secret: decryptedPass!,
+                                        description: widget.description,
+                                      ),
+                                    )
+                                  : null,
                             ),
                             ElevatedButton.icon(
                               icon: const Icon(Icons.copy),

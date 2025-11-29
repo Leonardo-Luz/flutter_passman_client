@@ -76,6 +76,40 @@ class PasswordController extends ChangeNotifier {
     }
   }
 
+  Future<void> updatePassword({
+    required String id,
+    required String service,
+    required String masterPassword,
+    String? plainPassword,
+    required String description,
+  }) async {
+    final index = entries.indexWhere((e) => e.id == id);
+    if (index == -1) {
+      throw Exception("Password entry not found");
+    }
+    loading = true;
+    notifyListeners();
+
+    final oldEntry = entries[index];
+
+    final encrypted = plainPassword != null && plainPassword.isNotEmpty
+        ? await encrypt(masterPassword, plainPassword)
+        : oldEntry.secret;
+
+    final updatedEntry = PassEntry(
+      id: id,
+      service: service,
+      secret: encrypted,
+      description: description,
+    );
+
+    await dao.update(updatedEntry);
+    entries[index] = updatedEntry;
+
+    loading = false;
+    notifyListeners();
+  }
+
   Future<void> delete(String id) async {
     await dao.deleteById(id);
     entries.removeWhere((e) => e.id == id);

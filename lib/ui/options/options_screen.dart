@@ -44,9 +44,23 @@ class _OptionsScreenState extends State<OptionsScreen> {
       await file.writeAsString(encrypted);
 
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("Backup exported!")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              spacing: 16,
+              children: [
+                Icon(Icons.check_circle, color: AppColors.backgroundColor),
+                Text(
+                  "Backup exported!",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            backgroundColor: AppColors.mainColor,
+          ),
+        );
       }
     }
 
@@ -78,7 +92,21 @@ class _OptionsScreenState extends State<OptionsScreen> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Invalid master password!")),
+          const SnackBar(
+            content: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              spacing: 16,
+              children: [
+                Icon(Icons.remove_circle, color: AppColors.backgroundColor),
+                Text(
+                  "Invalid master password!",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            backgroundColor: AppColors.mainColor,
+          ),
         );
       }
       if (mounted) setState(() => loading = false);
@@ -106,9 +134,23 @@ class _OptionsScreenState extends State<OptionsScreen> {
     }
 
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Backup imported!")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            spacing: 16,
+            children: [
+              Icon(Icons.check_circle, color: AppColors.backgroundColor),
+              Text(
+                "Backup imported!",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.mainColor,
+        ),
+      );
       setState(() => loading = false);
     }
   }

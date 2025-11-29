@@ -1,58 +1,113 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_passman_client/controllers/password_controller.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
 import 'package:flutter_passman_client/ui/home/home_screen.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
   static const route = "/splash";
 
   @override
-  SplashScreenState createState() => SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<PasswordController>().loadPasswords();
+    });
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+
+    _controller.forward();
+
+    Timer(const Duration(seconds: 4), () {
       Navigator.pushReplacementNamed(context, HomeScreen.route);
     });
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            height: 400,
-            width: 400,
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.backgroundColor, width: 5),
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/splashimage.png'),
+      body: Center(
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: screenWidth * 0.5,
+                height: screenWidth * 0.5,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.mainColor.withAlpha(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.lock_rounded,
+                  size: screenWidth * 0.3,
+                  color: AppColors.mainColor,
+                ),
               ),
-            ),
+              const SizedBox(height: 30),
+              Text(
+                "Passman",
+                style: TextStyle(
+                  color: AppColors.mainColor,
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: screenWidth * 0.6,
+                child: LinearProgressIndicator(
+                  backgroundColor: Colors.white12,
+                  valueColor: AlwaysStoppedAnimation(AppColors.mainColor),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Securely managing your passwords",
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ],
           ),
-          Text(
-            'Aguarde ...',
-            style: TextStyle(
-              color: AppColors.mainColor,
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          LinearProgressIndicator(
-            backgroundColor: Colors.blue[200],
-            valueColor: AlwaysStoppedAnimation(AppColors.mainColor),
-          ),
-        ],
+        ),
       ),
     );
   }

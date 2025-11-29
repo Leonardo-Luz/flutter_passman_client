@@ -16,15 +16,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      context.read<PasswordController>().loadPasswords();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final controller = context.watch<PasswordController>();
 
