@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_passman_client/ui/countcard/count_card.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
@@ -30,18 +31,29 @@ class _HomeScreenState extends State<HomeScreen> {
           ? const Center(
               child: Text("No passwords yet", style: TextStyle(fontSize: 16)),
             )
-          : ListView.builder(
-              itemCount: controller.entries.length,
-              itemBuilder: (_, i) {
-                final e = controller.entries[i];
-                return PassCard(
-                  key: ValueKey(e.id),
-                  id: e.id,
-                  service: e.service,
-                  secret: e.secret,
-                  description: e.description ?? "-",
-                );
-              },
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemCount: controller.entries.length + 1,
+                itemBuilder: (_, i) {
+                  if (i == 0) {
+                    return CountCard(
+                      count: controller.getPasswordsQty(),
+                      title: "Passwords",
+                      icon: Icons.key,
+                    );
+                  }
+
+                  final e = controller.entries[i - 1];
+                  return PassCard(
+                    key: ValueKey(e.id),
+                    id: e.id,
+                    service: e.service,
+                    secret: e.secret,
+                    description: e.description ?? "-",
+                  );
+                },
+              ),
             ),
     );
   }

@@ -178,4 +178,6 @@ class PasswordController extends ChangeNotifier {
     await loadPasswords();
     return true;
   }
+
+  int getPasswordsQty() => entries.length;
 }

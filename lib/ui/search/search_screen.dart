@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_passman_client/ui/countcard/count_card.dart';
 import 'package:flutter_passman_client/ui/passcard/passcard.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
@@ -50,7 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      appBar: getAppBar(title: 'Search Password'),
+      appBar: getAppBar(title: "Search Password"),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -76,18 +77,28 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             const SizedBox(height: 20),
             if (searching || controller.loading)
-              const Center(child: CircularProgressIndicator(color: Colors.white))
-            else if (filteredEntries.isEmpty)
-              const Text(
-                "Nenhum resultado encontrado.",
-                style: TextStyle(color: Colors.white70),
+              const Center(
+                child: CircularProgressIndicator(color: Colors.white),
               )
+            else if (filteredEntries.isEmpty)
+                CountCard(
+                  count: filteredEntries.length,
+                  title: "No results found.",
+                  icon: Icons.warning_rounded,
+                )
             else
               Expanded(
                 child: ListView.builder(
-                  itemCount: filteredEntries.length,
+                  itemCount: filteredEntries.length + 1,
                   itemBuilder: (context, i) {
-                    final e = filteredEntries[i];
+                    if (i == 0) {
+                      return CountCard(
+                        count: filteredEntries.length,
+                        title: "Results",
+                      );
+                    }
+
+                    final e = filteredEntries[i - 1];
                     return PassCard(
                       key: ValueKey(e.id),
                       id: e.id,

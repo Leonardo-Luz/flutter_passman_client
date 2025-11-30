@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_passman_client/models/passentry.dart';
+import 'package:flutter_passman_client/ui/_core/app_colors.dart';
+import 'package:flutter_passman_client/ui/_core/app_theme.dart';
 import 'package:flutter_passman_client/ui/edit/edit_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
@@ -111,6 +113,7 @@ class _PassCardState extends State<PassCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppColors.backgroundBarColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         children: [

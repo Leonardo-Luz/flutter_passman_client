@@ -193,14 +193,14 @@ class _OptionsScreenState extends State<OptionsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton.icon(
-                    icon: const Icon(Icons.download),
-                    label: const Text("Export"),
+                    icon: const Icon(Icons.download, size: 24),
+                    label: const Text("Export", style: TextStyle(fontSize: 26)),
                     onPressed: exportBackup,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
-                    icon: const Icon(Icons.upload),
-                    label: const Text("Import"),
+                    icon: const Icon(Icons.upload, size: 24),
+                    label: const Text("Import", style: TextStyle(fontSize: 26)),
                     onPressed: importBackup,
                   ),
                 ],
