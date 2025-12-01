@@ -53,7 +53,25 @@ class _PassCardState extends State<PassCard> {
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Invalid master password!")));
+      ).showSnackBar(const SnackBar(
+          content: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            spacing: 16,
+            children: [
+              Icon(
+                Icons.remove_circle,
+                color: AppColors.backgroundColor,
+              ),
+              Text(
+                "Invalid master password!",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.mainColor,
+        ),
+      );
 
       return;
     }
@@ -98,7 +116,25 @@ class _PassCardState extends State<PassCard> {
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Invalid master password!")));
+      ).showSnackBar(const SnackBar(
+          content: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            spacing: 16,
+            children: [
+              Icon(
+                Icons.remove_circle,
+                color: AppColors.backgroundColor,
+              ),
+              Text(
+                "Invalid master password!",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          backgroundColor: AppColors.mainColor,
+        ),
+      );
 
       return;
     }
@@ -221,11 +257,23 @@ class _PassCardState extends State<PassCard> {
                                       );
                                       ScaffoldMessenger.of(
                                         context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text(
-                                            "Password copied to clipboard!",
+                                      ).showSnackBar(const SnackBar(
+                                          content: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            spacing: 16,
+                                            children: [
+                                              Icon(
+                                                Icons.check_circle,
+                                                color: AppColors.backgroundColor,
+                                              ),
+                                              Text(
+                                                "Password copied to clipboard!",
+                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                              ),
+                                            ],
                                           ),
+                                          backgroundColor: AppColors.mainColor,
                                         ),
                                       );
                                     }
