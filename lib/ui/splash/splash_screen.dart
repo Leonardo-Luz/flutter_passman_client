@@ -80,7 +80,6 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
               Text(
                 "Passman",
                 style: TextStyle(
@@ -90,7 +89,6 @@ class _SplashScreenState extends State<SplashScreen>
                   letterSpacing: 2,
                 ),
               ),
-              const SizedBox(height: 20),
               SizedBox(
                 width: screenWidth * 0.6,
                 child: LinearProgressIndicator(
@@ -98,7 +96,6 @@ class _SplashScreenState extends State<SplashScreen>
                   valueColor: AlwaysStoppedAnimation(AppColors.mainColor),
                 ),
               ),
-              const SizedBox(height: 10),
               Text(
                 "Securely managing your passwords",
                 style: TextStyle(

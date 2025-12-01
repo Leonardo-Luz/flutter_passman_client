@@ -118,6 +118,9 @@ class _PassCardState extends State<PassCard> {
       child: Column(
         children: [
           ListTile(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.all(Radius.circular(12)),
+            ),
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 15,
