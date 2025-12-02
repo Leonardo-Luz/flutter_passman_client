@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
 import 'package:flutter_passman_client/ui/_core/widgets/appbar.dart';
+import 'package:flutter_passman_client/ui/_core/widgets/bottombar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
 import '../../utils/crypt.dart';
@@ -185,7 +186,8 @@ class _OptionsScreenState extends State<OptionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      appBar: getAppBar(title: "Opções"),
+      appBar: getAppBar(title: "Options"),
+      bottomNavigationBar: getBottomBar(context, 2),
       body: Center(
         child: loading
             ? const CircularProgressIndicator()

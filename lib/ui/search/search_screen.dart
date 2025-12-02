@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_passman_client/ui/_core/widgets/bottombar.dart';
 import 'package:flutter_passman_client/ui/countcard/count_card.dart';
 import 'package:flutter_passman_client/ui/passcard/passcard.dart';
 import 'package:provider/provider.dart';
@@ -52,30 +53,11 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: getAppBar(title: "Search Password"),
+      bottomNavigationBar: getBottomBar(context, 0),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(top: 16, bottom: 80, left: 16, right: 16),
         child: Column(
           children: [
-            TextField(
-              controller: query,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                labelText: 'Service',
-                labelStyle: const TextStyle(color: Colors.white70),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search, color: Colors.white70),
-                  onPressed: runSearch,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white.withAlpha(90)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-              ),
-              onSubmitted: (_) => runSearch(),
-            ),
-            const SizedBox(height: 20),
             if (searching || controller.loading)
               const Center(
                 child: CircularProgressIndicator(color: Colors.white),
@@ -110,6 +92,31 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
           ],
+        ),
+      ),
+      bottomSheet: SafeArea(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          child: TextField(
+              controller: query,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Service',
+                labelStyle: const TextStyle(color: Colors.white70),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search, color: Colors.white70),
+                  onPressed: runSearch,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white.withAlpha(90)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              onSubmitted: (_) => runSearch(),
+            ),
         ),
       ),
     );
