@@ -199,36 +199,43 @@ class _PassCardState extends State<PassCard> {
                     Text(decryptedPass!, style: const TextStyle(fontSize: 16)),
                     const SizedBox(height: 12),
 
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Description:",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Description:",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
                               ),
-                              Text(widget.description),
-                            ],
-                          ),
+                            ),
+                            Text(widget.description),
+                          ],
                         ),
 
-                        Row(
+                        const SizedBox(height: 12),
+
+                        Wrap(
+                          runSpacing: 8,
                           spacing: 8,
                           children: [
                             ElevatedButton.icon(
                               icon: const Icon(Icons.delete),
-                              label: const Text("Remove"),
+                              label: const Text(
+                                "Remove",
+                                style: TextStyle(fontSize: 12),
+                              ),
                               onPressed: requestRemove,
                             ),
                             ElevatedButton.icon(
                               icon: const Icon(Icons.edit),
-                              label: const Text("Edit"),
+                              label: const Text(
+                                "Edit",
+                                style: TextStyle(fontSize: 12),
+                              ),
                               onPressed: () => decryptedPass != null
                                   ? Navigator.pushNamed(
                                       context,
@@ -245,7 +252,10 @@ class _PassCardState extends State<PassCard> {
                             ),
                             ElevatedButton.icon(
                               icon: const Icon(Icons.copy),
-                              label: const Text("Copy"),
+                              label: const Text(
+                                "Copy",
+                                style: TextStyle(fontSize: 12),
+                              ),
                               onPressed: decryptedPass != null
                                   ? () {
                                       Clipboard.setData(

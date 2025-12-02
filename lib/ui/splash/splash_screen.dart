@@ -58,26 +58,24 @@ class _SplashScreenState extends State<SplashScreen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: Container(
-                  width: screenWidth * 0.5,
-                  height: screenWidth * 0.5,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.mainColor.withAlpha(22),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    Icons.lock_rounded,
-                    size: screenWidth * 0.3,
-                    color: AppColors.mainColor,
-                  ),
+              Container(
+                width: screenWidth * 0.5,
+                height: screenWidth * 0.5,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.mainColor.withAlpha(22),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.lock_rounded,
+                  size: screenWidth * 0.3,
+                  color: AppColors.mainColor,
                 ),
               ),
               Text(
