@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
+import 'package:flutter_passman_client/utils/validator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
 import 'package:flutter_passman_client/ui/_core/widgets/appbar.dart';
@@ -161,13 +162,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            TextField(
+            TextFormField(
               controller: serviceCtrl,
+              validator: validateService(),
+              autovalidateMode: AutovalidateMode.onUnfocus,
               decoration: const InputDecoration(labelText: "Service"),
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: passwordCtrl,
+              validator: validatePassword(),
+              autovalidateMode: AutovalidateMode.onUnfocus,
               decoration: InputDecoration(
                 labelText: "Password",
                 suffixIcon: Row(
@@ -201,14 +206,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               obscureText: !passwordVisible,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: descriptionCtrl,
               decoration: const InputDecoration(labelText: "Description"),
               maxLines: 3,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: masterCtrl,
+              validator: validateMaster(),
+              autovalidateMode: AutovalidateMode.onUnfocus,
               decoration: InputDecoration(
                 labelText: "Master Password",
                 suffixIcon: Row(

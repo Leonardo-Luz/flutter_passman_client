@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
 import 'package:flutter_passman_client/models/passentry.dart';
+import 'package:flutter_passman_client/utils/validator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
 import 'package:flutter_passman_client/ui/_core/widgets/appbar.dart';
@@ -142,13 +143,17 @@ class _EditScreenState extends State<EditScreen> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            TextField(
+            TextFormField(
               controller: serviceCtrl,
+              validator: validateService(),
+              autovalidateMode: AutovalidateMode.onUnfocus,
               decoration: const InputDecoration(labelText: "Service"),
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: passwordCtrl,
+              validator: validatePassword(),
+              autovalidateMode: AutovalidateMode.onUnfocus,
               decoration: InputDecoration(
                 labelText: "Password",
                 suffixIcon: Row(
@@ -188,8 +193,10 @@ class _EditScreenState extends State<EditScreen> {
               maxLines: 3,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: masterCtrl,
+              validator: validateMaster(),
+              autovalidateMode: AutovalidateMode.onUnfocus,
               decoration: InputDecoration(
                 labelText: "Master Password",
                 suffixIcon: Row(
@@ -197,9 +204,7 @@ class _EditScreenState extends State<EditScreen> {
                   children: [
                     IconButton(
                       icon: Icon(
-                        masterVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                        masterVisible ? Icons.visibility : Icons.visibility_off,
                       ),
                       onPressed: () {
                         setState(() => masterVisible = !masterVisible);
@@ -211,11 +216,20 @@ class _EditScreenState extends State<EditScreen> {
               obscureText: !masterVisible,
             ),
             const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: updatePassword,
-              child: const Text("Save Changes"),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          child: ElevatedButton(
+            onPressed: updatePassword,
+            child: const Text(
+              "Save Changes",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
       ),
     );
