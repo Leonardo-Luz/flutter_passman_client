@@ -3,12 +3,14 @@ class PassEntry {
   final String service;
   final String secret;
   final String? description;
+  final String? master;
 
   PassEntry({
     required this.id,
     required this.service,
     required this.secret,
     this.description,
+    this.master,
   });
 
   Map<String, dynamic> toMap() {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_passman_client/models/passentry.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
-import 'package:flutter_passman_client/ui/_core/app_theme.dart';
 import 'package:flutter_passman_client/ui/edit/edit_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_passman_client/controllers/password_controller.dart';
@@ -30,6 +29,7 @@ class _PassCardState extends State<PassCard> {
   bool expanded = false;
   bool loading = false;
   String? decryptedPass;
+  String? masterTemp;
 
   Future<void> requestDecryption() async {
     final master = await askMasterPasswordDialog(context);
@@ -51,18 +51,14 @@ class _PassCardState extends State<PassCard> {
     if (result == null) {
       setState(() => loading = false);
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
           content: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             spacing: 16,
             children: [
-              Icon(
-                Icons.remove_circle,
-                color: AppColors.backgroundColor,
-              ),
+              Icon(Icons.remove_circle, color: AppColors.backgroundColor),
               Text(
                 "Invalid master password!",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -76,6 +72,8 @@ class _PassCardState extends State<PassCard> {
       return;
     }
 
+    masterTemp = master;
+
     setState(() {
       decryptedPass = result;
       loading = false;
@@ -86,6 +84,7 @@ class _PassCardState extends State<PassCard> {
     if (!mounted) return;
     setState(() => loading = true);
 
+    masterTemp = null;
     decryptedPass = null;
 
     setState(() {
@@ -114,18 +113,14 @@ class _PassCardState extends State<PassCard> {
     if (result == null) {
       setState(() => loading = false);
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
           content: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             spacing: 16,
             children: [
-              Icon(
-                Icons.remove_circle,
-                color: AppColors.backgroundColor,
-              ),
+              Icon(Icons.remove_circle, color: AppColors.backgroundColor),
               Text(
                 "Invalid master password!",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -243,6 +238,7 @@ class _PassCardState extends State<PassCard> {
                                         service: widget.service,
                                         secret: decryptedPass!,
                                         description: widget.description,
+                                        master: masterTemp,
                                       ),
                                     )
                                   : null,
@@ -257,19 +253,24 @@ class _PassCardState extends State<PassCard> {
                                       );
                                       ScaffoldMessenger.of(
                                         context,
-                                      ).showSnackBar(const SnackBar(
+                                      ).showSnackBar(
+                                        const SnackBar(
                                           content: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             spacing: 16,
                                             children: [
                                               Icon(
                                                 Icons.check_circle,
-                                                color: AppColors.backgroundColor,
+                                                color:
+                                                    AppColors.backgroundColor,
                                               ),
                                               Text(
                                                 "Password copied to clipboard!",
-                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ],
                                           ),

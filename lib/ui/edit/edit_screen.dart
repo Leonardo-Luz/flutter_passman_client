@@ -24,6 +24,7 @@ class _EditScreenState extends State<EditScreen> {
   late final TextEditingController descriptionCtrl;
   late final TextEditingController masterCtrl;
   bool passwordVisible = false;
+  bool masterVisible = false;
 
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _EditScreenState extends State<EditScreen> {
     descriptionCtrl = TextEditingController(
       text: widget.entry.description ?? "",
     );
-    masterCtrl = TextEditingController(text: "");
+    masterCtrl = TextEditingController(text: widget.entry.master ?? "");
   }
 
   @override
@@ -96,6 +97,42 @@ class _EditScreenState extends State<EditScreen> {
     return List.generate(length, (_) => all[rand.nextInt(all.length)]).join();
   }
 
+  void updatePassword() async {
+    final svc = serviceCtrl.text.trim();
+    final pwd = passwordCtrl.text.trim();
+    final desc = descriptionCtrl.text.trim();
+    final master = masterCtrl.text.trim();
+
+    if (svc.isEmpty || master.isEmpty) {
+      showSnackbar(
+        message: "Service and master password are required.",
+        success: false,
+      );
+      return;
+    }
+
+    final controller = context.read<PasswordController>();
+    final navigator = Navigator.of(context);
+
+    try {
+      await controller.updatePassword(
+        id: widget.entry.id,
+        service: svc,
+        masterPassword: master,
+        plainPassword: pwd,
+        description: desc,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      showSnackbar(message: "Failed to update: $e", success: false);
+      return;
+    }
+
+    if (!mounted) return;
+    showSnackbar(message: "Password updated!", success: true);
+    navigator.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,46 +190,29 @@ class _EditScreenState extends State<EditScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: masterCtrl,
-              decoration: const InputDecoration(labelText: "Master Password"),
-              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Master Password",
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        masterVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() => masterVisible = !masterVisible);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              obscureText: !masterVisible,
             ),
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: () async {
-                final svc = serviceCtrl.text.trim();
-                final pwd = passwordCtrl.text.trim();
-                final desc = descriptionCtrl.text.trim();
-                final master = masterCtrl.text.trim();
-
-                if (svc.isEmpty || master.isEmpty) {
-                  showSnackbar(
-                    message: "Service and master password are required.",
-                    success: false,
-                  );
-                  return;
-                }
-
-                final controller = context.read<PasswordController>();
-                final navigator = Navigator.of(context);
-
-                try {
-                  await controller.updatePassword(
-                    id: widget.entry.id,
-                    service: svc,
-                    masterPassword: master,
-                    plainPassword: pwd,
-                    description: desc,
-                  );
-                } catch (e) {
-                  if (!mounted) return;
-                  showSnackbar(message: "Failed to update: $e", success: false);
-                  return;
-                }
-
-                if (!mounted) return;
-                showSnackbar(message: "Password updated!", success: true);
-                navigator.pop();
-              },
+              onPressed: updatePassword,
               child: const Text("Save Changes"),
             ),
           ],
