@@ -187,7 +187,7 @@ class _EditScreenState extends State<EditScreen> {
               obscureText: !passwordVisible,
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
               controller: descriptionCtrl,
               decoration: const InputDecoration(labelText: "Description"),
               maxLines: 3,
