@@ -76,6 +76,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
     final pick = await FilePicker.platform.pickFiles(
       dialogTitle: "Select backup file",
       type: FileType.any,
+      withData: true,
     );
 
     if (pick == null || pick.files.isEmpty) return;
