@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_passman_client/ui/_core/app_colors.dart';
@@ -35,9 +36,12 @@ class _OptionsScreenState extends State<OptionsScreen> {
 
     final encrypted = await encrypt(master, plain);
 
+    Uint8List data = Uint8List.fromList(encrypted.codeUnits);
+
     final outputPath = await FilePicker.platform.saveFile(
       dialogTitle: "Export backup",
       fileName: "passman_backup.pmb",
+      bytes: data,
     );
 
     if (outputPath != null) {
